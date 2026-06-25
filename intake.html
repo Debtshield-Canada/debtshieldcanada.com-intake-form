@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Debt Shield Intake</title>
+  <link rel="icon" href="./images/favicon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="./images/webclip.svg" />
+
+  <link rel="stylesheet" href="./css/normalize.css" />
+  <link rel="stylesheet" href="./css/webflow.css" />
+  <link rel="stylesheet" href="./css/debt-shield.webflow.css" />
+  <link rel="stylesheet" href="./intake.css" />
+
+  <script src="./vendor/pdf-lib.min.js" defer></script>
+  <script src="./intake.js" defer></script>
+</head>
+<body>
+  <main class="intake-page">
+    <section class="intake-wrap">
+      <header class="intake-brand">
+        <a class="intake-logo-link" href="https://debtshieldcanada.com/" aria-label="Debt Shield Canada home">
+          <img class="intake-logo" src="./images/debt-shield-logo-red.png" alt="Debt Shield" />
+        </a>
+      </header>
+
+      <div class="intake-pill">Secure Client Intake</div>
+
+      <h1 class="intake-title">Complete Your Intake</h1>
+
+      <p class="intake-copy">
+        We will walk through this in small steps and calculate your totals as you go.
+      </p>
+
+      <form class="intake-card" data-intake-form novalidate>
+        <div class="journey-progress" aria-live="polite">
+          <span data-step-count>Step 1 of 8</span>
+          <div class="journey-progress-track" aria-hidden="true">
+            <span data-progress-bar></span>
+          </div>
+        </div>
+
+        <ol class="journey-step-list" aria-label="Intake progress">
+          <li data-step-label>Applicants</li>
+          <li data-step-label>History</li>
+          <li data-step-label>Income</li>
+          <li data-step-label>Personal assets</li>
+          <li data-step-label>Business assets</li>
+          <li data-step-label>Personal debts</li>
+          <li data-step-label>Business debts</li>
+          <li data-step-label>Review</li>
+        </ol>
+
+        <p class="intake-error" data-error hidden></p>
+
+        <section class="journey-panel" data-step-panel data-step-title="Applicants">
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 1</p>
+            <h2>Applicant Details</h2>
+          </div>
+
+          <div class="applicant-grid">
+            <fieldset class="applicant-block">
+              <legend>Applicant 1</legend>
+
+              <label class="field field-full">
+                <span>Full legal name</span>
+                <input class="intake-input" name="c1_full_name" autocomplete="name" required />
+              </label>
+
+              <label class="field field-full">
+                <span>Street address</span>
+                <input class="intake-input" name="c1_address_line1" autocomplete="street-address" />
+              </label>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>City</span>
+                  <input class="intake-input" name="c1_city" autocomplete="address-level2" />
+                </label>
+
+                <label class="field">
+                  <span>Province</span>
+                  <input class="intake-input" name="c1_province" autocomplete="address-level1" />
+                </label>
+
+                <label class="field">
+                  <span>Postal code</span>
+                  <input class="intake-input" name="c1_postal_code" autocomplete="postal-code" />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>SIN</span>
+                  <input class="intake-input" name="c1_sin" inputmode="numeric" />
+                </label>
+
+                <label class="field">
+                  <span>Date of birth</span>
+                  <input class="intake-input" name="c1_dob" type="date" />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>Email</span>
+                  <input class="intake-input" name="c1_email" type="email" autocomplete="email" required />
+                </label>
+
+                <label class="field">
+                  <span>Phone number</span>
+                  <input class="intake-input" name="c1_phone" autocomplete="tel" required />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>Signature</span>
+                  <input class="intake-input" name="c1_signature" />
+                </label>
+
+                <label class="field">
+                  <span>Date</span>
+                  <input class="intake-input" name="c1_signature_date" type="date" />
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="applicant-block">
+              <legend>Applicant 2</legend>
+
+              <label class="field field-full">
+                <span>Full legal name</span>
+                <input class="intake-input" name="c2_full_name" autocomplete="name" />
+              </label>
+
+              <label class="field field-full">
+                <span>Street address</span>
+                <input class="intake-input" name="c2_address_line1" autocomplete="street-address" />
+              </label>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>City</span>
+                  <input class="intake-input" name="c2_city" autocomplete="address-level2" />
+                </label>
+
+                <label class="field">
+                  <span>Province</span>
+                  <input class="intake-input" name="c2_province" autocomplete="address-level1" />
+                </label>
+
+                <label class="field">
+                  <span>Postal code</span>
+                  <input class="intake-input" name="c2_postal_code" autocomplete="postal-code" />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>SIN</span>
+                  <input class="intake-input" name="c2_sin" inputmode="numeric" />
+                </label>
+
+                <label class="field">
+                  <span>Date of birth</span>
+                  <input class="intake-input" name="c2_dob" type="date" />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>Email</span>
+                  <input class="intake-input" name="c2_email" type="email" autocomplete="email" />
+                </label>
+
+                <label class="field">
+                  <span>Phone number</span>
+                  <input class="intake-input" name="c2_phone" autocomplete="tel" />
+                </label>
+              </div>
+
+              <div class="field-row">
+                <label class="field">
+                  <span>Signature</span>
+                  <input class="intake-input" name="c2_signature" />
+                </label>
+
+                <label class="field">
+                  <span>Date</span>
+                  <input class="intake-input" name="c2_signature_date" type="date" />
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Financial History" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 2</p>
+            <h2>Financial History</h2>
+          </div>
+
+          <div class="question-list">
+            <fieldset class="choice-row">
+              <legend>Have you bought or sold a house in the last 5 years?</legend>
+              <div class="choice-group" data-yes-no="q_house">
+                <label><input type="radio" name="q_house" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_house" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_house_yes" data-yes-no-hidden="q_house_yes" />
+                <input type="hidden" name="q_house_no" data-yes-no-hidden="q_house_no" />
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-row">
+              <legend>Have you disposed of any assets in the last 12 months?</legend>
+              <div class="choice-group" data-yes-no="q_disposed">
+                <label><input type="radio" name="q_disposed" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_disposed" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_disposed_yes" data-yes-no-hidden="q_disposed_yes" />
+                <input type="hidden" name="q_disposed_no" data-yes-no-hidden="q_disposed_no" />
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-row">
+              <legend>Do you have life insurance with a cash surrender value?</legend>
+              <div class="choice-group" data-yes-no="q_life_insurance">
+                <label><input type="radio" name="q_life_insurance" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_life_insurance" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_life_insurance_yes" data-yes-no-hidden="q_life_insurance_yes" />
+                <input type="hidden" name="q_life_insurance_no" data-yes-no-hidden="q_life_insurance_no" />
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-row">
+              <legend>Do you have an RRSP, and have you made contributions in the last 12 months?</legend>
+              <div class="choice-group" data-yes-no="q_rrsp">
+                <label><input type="radio" name="q_rrsp" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_rrsp" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_rrsp_yes" data-yes-no-hidden="q_rrsp_yes" />
+                <input type="hidden" name="q_rrsp_no" data-yes-no-hidden="q_rrsp_no" />
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-row">
+              <legend>Do you have an RDSP, and have you made contributions in the last 12 months?</legend>
+              <div class="choice-group" data-yes-no="q_rdsp">
+                <label><input type="radio" name="q_rdsp" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_rdsp" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_rdsp_yes" data-yes-no-hidden="q_rdsp_yes" />
+                <input type="hidden" name="q_rdsp_no" data-yes-no-hidden="q_rdsp_no" />
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-row">
+              <legend>Do you have an RESP?</legend>
+              <div class="choice-group" data-yes-no="q_resp">
+                <label><input type="radio" name="q_resp" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_resp" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_resp_yes" data-yes-no-hidden="q_resp_yes" />
+                <input type="hidden" name="q_resp_no" data-yes-no-hidden="q_resp_no" />
+              </div>
+            </fieldset>
+
+            <fieldset class="choice-row">
+              <legend>Do you have a TFSA?</legend>
+              <div class="choice-group" data-yes-no="q_tfsa">
+                <label><input type="radio" name="q_tfsa" value="yes" required /> <span>Yes</span></label>
+                <label><input type="radio" name="q_tfsa" value="no" /> <span>No</span></label>
+                <input type="hidden" name="q_tfsa_yes" data-yes-no-hidden="q_tfsa_yes" />
+                <input type="hidden" name="q_tfsa_no" data-yes-no-hidden="q_tfsa_no" />
+              </div>
+            </fieldset>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Household Income" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 3</p>
+            <h2>Household Income</h2>
+          </div>
+
+          <div class="entry-table income-table" data-income-rows></div>
+
+          <div class="totals-strip">
+            <div>
+              <span>Applicant 1 monthly income</span>
+              <output data-money-output="inc_total_a1">$0.00</output>
+              <input type="hidden" name="inc_total_a1" data-money-hidden="inc_total_a1" />
+            </div>
+
+            <div>
+              <span>Applicant 2 monthly income</span>
+              <output data-money-output="inc_total_a2">$0.00</output>
+              <input type="hidden" name="inc_total_a2" data-money-hidden="inc_total_a2" />
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Personal Assets" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 4</p>
+            <h2>Personal Assets</h2>
+            <p>Net is estimated value minus debt owing.</p>
+          </div>
+
+          <div class="entry-table asset-table" data-asset-rows="personal"></div>
+
+          <div class="totals-strip totals-strip-three">
+            <div>
+              <span>Personal asset value</span>
+              <output data-money-output="pa_subtotal_value">$0.00</output>
+              <input type="hidden" name="pa_subtotal_value" data-money-hidden="pa_subtotal_value" />
+            </div>
+
+            <div>
+              <span>Personal asset debt</span>
+              <output data-money-output="pa_subtotal_debt">$0.00</output>
+              <input type="hidden" name="pa_subtotal_debt" data-money-hidden="pa_subtotal_debt" />
+            </div>
+
+            <div>
+              <span>Personal net assets</span>
+              <output data-money-output="pa_subtotal_net">$0.00</output>
+              <input type="hidden" name="pa_subtotal_net" data-money-hidden="pa_subtotal_net" />
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Business Assets" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 4</p>
+            <h2>Business Assets</h2>
+            <p>Only complete this section if business assets apply.</p>
+          </div>
+
+          <div class="entry-table asset-table" data-asset-rows="business"></div>
+
+          <div class="totals-strip totals-strip-three">
+            <div>
+              <span>Business asset value</span>
+              <output data-money-output="ba_subtotal_value">$0.00</output>
+              <input type="hidden" name="ba_subtotal_value" data-money-hidden="ba_subtotal_value" />
+            </div>
+
+            <div>
+              <span>Business asset debt</span>
+              <output data-money-output="ba_subtotal_debt">$0.00</output>
+              <input type="hidden" name="ba_subtotal_debt" data-money-hidden="ba_subtotal_debt" />
+            </div>
+
+            <div>
+              <span>Business net assets</span>
+              <output data-money-output="ba_subtotal_net">$0.00</output>
+              <input type="hidden" name="ba_subtotal_net" data-money-hidden="ba_subtotal_net" />
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Personal Debts" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 5</p>
+            <h2>Personal Liabilities</h2>
+            <p>Examples include credit cards, tax debt, student loans, and personal loans.</p>
+          </div>
+
+          <div class="entry-table liability-table" data-liability-rows="pl"></div>
+
+          <div class="liability-actions">
+            <button class="secondary-button" type="button" data-add-liability="pl">Add another personal debt</button>
+          </div>
+
+          <div class="totals-strip">
+            <div>
+              <span>Total personal liabilities</span>
+              <output data-money-output="pl_total">$0.00</output>
+              <input type="hidden" name="pl_total" data-money-hidden="pl_total" />
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Business Debts" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Part 6</p>
+            <h2>Business Liabilities</h2>
+            <p>Examples include CRA debt, business loans, credit cards, and loans from individuals.</p>
+          </div>
+
+          <div class="entry-table liability-table" data-liability-rows="bl"></div>
+
+          <div class="liability-actions">
+            <button class="secondary-button" type="button" data-add-liability="bl">Add another business debt</button>
+          </div>
+
+          <div class="totals-strip">
+            <div>
+              <span>Total business liabilities</span>
+              <output data-money-output="bl_total">$0.00</output>
+              <input type="hidden" name="bl_total" data-money-hidden="bl_total" />
+            </div>
+          </div>
+        </section>
+
+        <section class="journey-panel" data-step-panel data-step-title="Review" hidden>
+          <div class="panel-heading">
+            <p class="panel-kicker">Review</p>
+            <h2>Your Intake Snapshot</h2>
+          </div>
+
+          <div class="summary-grid">
+            <div>
+              <span>Monthly household income</span>
+              <output data-summary="householdIncome">$0.00</output>
+            </div>
+
+            <div>
+              <span>Total asset value</span>
+              <output data-money-output="as_total_value">$0.00</output>
+              <input type="hidden" name="as_total_value" data-money-hidden="as_total_value" />
+            </div>
+
+            <div>
+              <span>Total asset debt</span>
+              <output data-money-output="as_total_debt">$0.00</output>
+              <input type="hidden" name="as_total_debt" data-money-hidden="as_total_debt" />
+            </div>
+
+            <div>
+              <span>Total net assets</span>
+              <output data-money-output="as_total_net">$0.00</output>
+              <input type="hidden" name="as_total_net" data-money-hidden="as_total_net" />
+            </div>
+
+            <div>
+              <span>Total liabilities</span>
+              <output data-summary="allLiabilities">$0.00</output>
+            </div>
+
+            <div>
+              <span>Estimated position</span>
+              <output data-summary="estimatedPosition">$0.00</output>
+            </div>
+          </div>
+
+          <label class="field field-full">
+            <span>Anything else Debt Shield should know?</span>
+            <textarea class="intake-input" name="notes"></textarea>
+          </label>
+
+          <label class="consent-line">
+            <input type="checkbox" name="client_confirmation" value="confirmed" required />
+            <span>I confirm the information provided is accurate to the best of my knowledge.</span>
+          </label>
+
+          <a class="pdf-link" href="./Intake_Form.pdf" target="_blank" rel="noopener" data-prefill-pdf>View prefilled PDF form</a>
+        </section>
+
+        <div class="journey-actions">
+          <button class="secondary-button" type="button" data-prev-step>Back</button>
+          <button class="intake-button" type="button" data-next-step>Next</button>
+          <button class="intake-button" type="submit" data-submit-step hidden>Submit Intake</button>
+        </div>
+
+        <p class="intake-privacy">
+          Your information is used only to review your file and follow up with next steps.
+        </p>
+      </form>
+
+      <div class="intake-success" data-success hidden>
+        <h2>Thank you</h2>
+        <p>
+          Your intake has been received. Debt Shield will review your information and follow up with next steps.
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
