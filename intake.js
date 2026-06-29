@@ -63,10 +63,13 @@ if (form) {
   const nextButton = form.querySelector("[data-next-step]");
   const submitButton = form.querySelector("[data-submit-step]");
   const prefillPdfLink = form.querySelector("[data-prefill-pdf]");
+  const submitEndpoint = getSubmitEndpoint();
   const fadeMs = 190;
+  const submitButtonText = submitButton?.textContent || "Submit Intake";
 
   let activeStep = 0;
   let isTransitioning = false;
+  let isSubmitting = false;
   let currentPdfUrl = "";
 
   updateStepUi();
@@ -146,32 +149,59 @@ if (form) {
     true
   );
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    if (activeStep !== panels.length - 1) {
+      if (validateStep()) {
+        showStep(activeStep + 1);
+      }
+      return;
+    }
 
     if (!validateStep()) {
       return;
     }
 
+    if (!validateAllSteps()) {
+      return;
+    }
+
+    if (!submitEndpoint) {
+      showError("Submission is not configured yet. Please contact Debt Shield.");
+      return;
+    }
+
     calculateAll();
-    const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+    hideError();
+    setSubmitting(true);
 
-    console.log("Debt Shield intake payload:", payload);
+    try {
+      const response = await fetch(submitEndpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "omit",
+        body: JSON.stringify(buildSubmissionPayload()),
+      });
 
-    form.classList.add("is-fading");
-    window.setTimeout(() => {
-      form.hidden = true;
-      form.classList.remove("is-fading");
+      const result = await response.json().catch(() => ({}));
 
-      if (success) {
-        success.hidden = false;
-        success.classList.add("is-fading");
-        window.requestAnimationFrame(() => {
-          success.classList.remove("is-fading");
-        });
+      if (!response.ok || result.success === false) {
+        throw new Error(result.error || "submission_failed");
       }
-    }, fadeMs);
+
+      showSuccess();
+    } catch (error) {
+      showError("We could not submit your intake. Please try again or contact Debt Shield.");
+    } finally {
+      setSubmitting(false);
+    }
   });
 
   function showStep(nextStep) {
@@ -246,15 +276,42 @@ if (form) {
 
     for (const field of requiredFields) {
       if (!field.checkValidity()) {
-        showError("Please complete the required fields before continuing.");
-        field.reportValidity();
-        field.focus({ preventScroll: false });
+        reportInvalidField(field);
         return false;
       }
     }
 
     hideError();
     return true;
+  }
+
+  function validateAllSteps() {
+    for (let index = 0; index < panels.length; index += 1) {
+      const requiredFields = Array.from(panels[index].querySelectorAll("[required]"));
+      const invalidField = requiredFields.find((field) => !field.checkValidity());
+
+      if (invalidField) {
+        if (index !== activeStep) {
+          showStep(index);
+          window.setTimeout(() => {
+            reportInvalidField(invalidField);
+          }, fadeMs + 40);
+        } else {
+          reportInvalidField(invalidField);
+        }
+
+        return false;
+      }
+    }
+
+    hideError();
+    return true;
+  }
+
+  function reportInvalidField(field) {
+    showError("Please complete the required fields before continuing.");
+    field.reportValidity();
+    field.focus({ preventScroll: false });
   }
 
   function showError(message) {
@@ -273,6 +330,62 @@ if (form) {
 
     errorBox.textContent = "";
     errorBox.hidden = true;
+  }
+
+  function setSubmitting(nextSubmitting) {
+    isSubmitting = nextSubmitting;
+
+    if (submitButton) {
+      submitButton.disabled = nextSubmitting;
+      submitButton.textContent = nextSubmitting ? "Submitting..." : submitButtonText;
+      submitButton.setAttribute("aria-busy", String(nextSubmitting));
+    }
+  }
+
+  function showSuccess() {
+    form.classList.add("is-fading");
+    window.setTimeout(() => {
+      form.hidden = true;
+      form.classList.remove("is-fading");
+
+      if (success) {
+        success.hidden = false;
+        success.classList.add("is-fading");
+        window.requestAnimationFrame(() => {
+          success.classList.remove("is-fading");
+        });
+      }
+    }, fadeMs);
+  }
+
+  function buildSubmissionPayload() {
+    const formData = new FormData(form);
+    const intake = {};
+
+    formData.forEach((value, key) => {
+      if (key === "intake_company" || key === "cf-turnstile-response") {
+        return;
+      }
+
+      intake[key] = String(value || "");
+    });
+
+    return {
+      source: "debtshield_intake",
+      formVersion: "2026-06-29",
+      submittedAt: new Date().toISOString(),
+      pageUrl: window.location.href,
+      turnstileToken: String(formData.get("cf-turnstile-response") || ""),
+      honeypot: String(formData.get("intake_company") || ""),
+      summary: {
+        householdIncome: formatMoney(getMoney("inc_total_a1") + getMoney("inc_total_a2")),
+        totalLiabilities: formatMoney(getMoney("pl_total") + getMoney("bl_total")),
+        estimatedPosition: formatMoney(
+          getMoney("as_total_net") - getMoney("pl_total") - getMoney("bl_total")
+        ),
+      },
+      intake,
+    };
   }
 
   function revealLiabilityRows(prefix) {
@@ -318,6 +431,23 @@ if (form) {
 
     return pdfDoc.save();
   }
+}
+
+function getSubmitEndpoint() {
+  if (window.INTAKE_SUBMIT_ENDPOINT) {
+    return window.INTAKE_SUBMIT_ENDPOINT;
+  }
+
+  if (["127.0.0.1", "localhost"].includes(window.location.hostname)) {
+    return "http://127.0.0.1:8787/intake";
+  }
+
+  const metaEndpoint = document
+    .querySelector('meta[name="intake-submit-endpoint"]')
+    ?.getAttribute("content")
+    ?.trim();
+
+  return metaEndpoint || "";
 }
 
 function renderIncomeRows() {

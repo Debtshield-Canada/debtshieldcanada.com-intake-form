@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="intake-submit-endpoint" content="https://debtshield-intake-worker.debtshield-intake.workers.dev/intake" />
   <title>Debt Shield Intake</title>
   <link rel="icon" href="./images/favicon.png" type="image/png" />
   <link rel="apple-touch-icon" href="./images/webclip.svg" />
@@ -52,6 +53,10 @@
         </ol>
 
         <p class="intake-error" data-error hidden></p>
+        <label class="intake-honeypot" aria-hidden="true">
+          <span>Company</span>
+          <input name="intake_company" autocomplete="off" tabindex="-1" />
+        </label>
 
         <section class="journey-panel" data-step-panel data-step-title="Applicants">
           <div class="panel-heading">
@@ -113,18 +118,6 @@
                   <input class="intake-input" name="c1_phone" autocomplete="tel" required />
                 </label>
               </div>
-
-              <div class="field-row">
-                <label class="field">
-                  <span>Signature</span>
-                  <input class="intake-input" name="c1_signature" />
-                </label>
-
-                <label class="field">
-                  <span>Date</span>
-                  <input class="intake-input" name="c1_signature_date" type="date" />
-                </label>
-              </div>
             </fieldset>
 
             <fieldset class="applicant-block">
@@ -178,18 +171,6 @@
                 <label class="field">
                   <span>Phone number</span>
                   <input class="intake-input" name="c2_phone" autocomplete="tel" />
-                </label>
-              </div>
-
-              <div class="field-row">
-                <label class="field">
-                  <span>Signature</span>
-                  <input class="intake-input" name="c2_signature" />
-                </label>
-
-                <label class="field">
-                  <span>Date</span>
-                  <input class="intake-input" name="c2_signature_date" type="date" />
                 </label>
               </div>
             </fieldset>

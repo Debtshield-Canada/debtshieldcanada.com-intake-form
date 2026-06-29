@@ -423,10 +423,23 @@ textarea.intake-input {
   opacity: .45;
 }
 
+.intake-button:disabled {
+  cursor: wait;
+  opacity: .7;
+}
+
 .intake-error {
   margin: 0 0 18px;
   color: #b0000d;
   font-weight: 800;
+}
+
+.intake-honeypot {
+  position: absolute;
+  left: -100vw;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .intake-success h2 {
