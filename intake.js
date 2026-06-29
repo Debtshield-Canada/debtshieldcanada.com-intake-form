@@ -703,7 +703,7 @@ function fillPdfField(pdfForm, name, rawValue) {
   }
 
   if (typeof field.check === "function") {
-    if (isAffirmative(value)) {
+    if (shouldCheckPdfField(name, value)) {
       field.check();
     } else if (typeof field.uncheck === "function") {
       field.uncheck();
@@ -718,6 +718,12 @@ function fillPdfField(pdfForm, name, rawValue) {
       field.setText?.(value);
     }
   }
+}
+
+function shouldCheckPdfField(name, value) {
+  const normalizedValue = String(value || "").toLowerCase();
+
+  return isAffirmative(normalizedValue) || (name.endsWith("_no") && normalizedValue === "no");
 }
 
 function isAffirmative(value) {
